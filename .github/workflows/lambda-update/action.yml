@@ -1,0 +1,48 @@
+name: update lambda
+description: push docker image to ECR, then update lambda
+inputs:
+  TARGET:
+    required: false
+    description: Dockerfile target
+  LAMBDA_NAME:
+    description: lambda function name
+    required: true
+  ECR_REGISTRY:
+    description: ECR name
+    required: true
+  REPOSITORY:
+    description: ECR repository name
+    required: true
+  IMAGE_TAG:
+    description: container image tag
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: tag
+      run: |
+        docker tag ${{ inputs.TARGET }}:latest 749825783834.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.LAMBDA_NAME }}:${{ inputs.IMAGE_TAG }}
+      shell: sh
+
+    # docker imageのタグをつけてpush
+    - name: push new container
+      id: push
+      env:
+        ECR_REGISTRY: ${{ inputs.ECR_REGISTRY }}
+        REPOSITORY: ${{ inputs.REPOSITORY }}
+        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+      run: docker push ${ECR_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}
+      shell: sh
+
+    # lambda function と provision concurrencyを既存のものを削除
+    # 最新バージョンlambdaを作成してprovision concurrencyも再度作成
+    - name: update lambda
+      id: update-lambda
+      env:
+        ECR_REGISTRY: ${{ inputs.ECR_REGISTRY }}
+        REPOSITORY: ${{ inputs.REPOSITORY }}
+        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+        FUNCTION: ${{ inputs.LAMBDA_NAME }}
+      run: sh .github/scripts/aws_lambda_update.sh
+      shell: sh

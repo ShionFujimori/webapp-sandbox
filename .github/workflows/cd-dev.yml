@@ -1,0 +1,50 @@
+name: CD dev
+# developにmergeされ、src/backend以下に変更があったときのみ更新
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "develop"
+    paths:
+      - "app/backend/**"
+
+env:
+  REGION: ap-northeast-1
+
+jobs:
+  CD-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup AWS credentials
+        uses: ./.github/workflows/composite/aws-setup
+        id: aws-setup
+        with:
+          REGION: ${{ env.REGION }}
+          # 以下の3つの情報は、githubのsecretsに登録しておく
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+
+      - name: Create image tag
+        uses: ./.github/workflows/composite/create-tag
+        id: create-tag
+
+      - name: Setup docker
+        uses: ./.github/workflows/composite/docker-setup
+        id: docker-setup
+        with:
+          TARGET: webapp-sandbox-dev
+
+      - name: Update lambda
+        uses: ./.github/workflows/composite/lambda-update
+        id: lambda-update
+        with:
+          TARGET: webapp-sandbox-dev
+          LAMBDA_NAME: webapp-sandbox-dev
+          ECR_REGISTRY: ${{ steps.aws-setup.outputs.ECR_REGISTRY }}
+          REPOSITORY: webapp-sandbox-dev
+          IMAGE_TAG: ${{ steps.create-tag.outputs.IMAGE_TAG }}
