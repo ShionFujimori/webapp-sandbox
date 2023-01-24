@@ -1,0 +1,14 @@
+awslambdaric==2.0.4
+aws-lambda-powertools==2.4.0
+
+# for development
+pysen==0.10.2
+black==22.8.0
+flake8==5.0.4
+isort==5.10.1
+mypy==0.971
+
+# for test
+pytest==7.1.3
+pytest-cov==3.0.0
+pytest-mock==3.8.2
