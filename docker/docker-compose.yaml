@@ -4,7 +4,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: 'webapp-sandbox/backend'
+    container_name: 'backend'
     image: webapp-sandbox/backend
     platform: linux/x86_64
     ports:
