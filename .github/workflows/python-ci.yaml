@@ -1,0 +1,40 @@
+name: python ci
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "src/backend/**.py"
+
+jobs:
+  Python:
+    name: Lint and test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/backend
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Build image
+        run: |
+          docker-compose -f ../../docker/docker-compose.yaml build backend
+          docker-compose -f ../../docker/docker-compose.yaml up -d backend
+      
+      - name: Lint
+        run: |
+          docker-compose -f ../../docker/docker-compose.yaml exec -T backend pysen run lint
+      
+      - name: Test
+        run: |
+          docker-compose -f ../../docker/docker-compose.yaml exec -T backend bash -c 'pytest tests/ --cov=. --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt'
+      
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: src/backend/pytest-coverage.txt
+          junitxml-path: src/backend/pytest.xml
