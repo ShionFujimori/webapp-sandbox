@@ -19,7 +19,7 @@ def make_response(statusCode: int, message: str, body: dict = {}) -> dict:
 
 def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
-        return make_response(HTTPStatus.OK, "Successful", {"response": "Hello World!!"})
+        return make_response(HTTPStatus.OK, "Successful", {"response": "Hello World!"})
     except Exception as e:
         print(e)
         return make_response(HTTPStatus.INTERNAL_SERVER_ERROR, "failed to get context")
