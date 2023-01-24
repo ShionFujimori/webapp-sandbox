@@ -38,7 +38,7 @@ test:
 .PHONY: lambda-test
 ## ローカルに立ち上げたlambdaサーバーにbase64データをリクエストする
 lambda-test:
-	curl -H "Content-Type: application/json" -d "{'key': 'aaa'}" http://localhost:8001/2015-03-31/functions/function/invocations
+	curl -H "Content-Type: application/json" -d '{"key": "aaa"}' http://localhost:8001/2015-03-31/functions/function/invocations
 
 .PHONY: help
 ## help

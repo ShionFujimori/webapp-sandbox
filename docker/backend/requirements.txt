@@ -1,5 +1,6 @@
 awslambdaric==2.0.4
 aws-lambda-powertools==2.4.0
+jmespath==1.0.1
 
 # for development
 pysen==0.10.2
