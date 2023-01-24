@@ -9,6 +9,7 @@ on:
       - "src/backend/**"
 
 env:
+  AWS_ROLE_ARN: arn:aws:iam::749825783834:role/GithubWebappSandboxRole
   REGION: us-east-1
 
 jobs:
@@ -23,11 +24,8 @@ jobs:
         uses: ./.github/workflows/composite/aws-setup
         id: aws-setup
         with:
+          AWS_ROLE_ARN: ${{ env.AWS_ROLE_ARN }}
           REGION: ${{ env.REGION }}
-          # 以下の3つの情報は、githubのsecretsに登録しておく
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
       - name: Create image tag
         uses: ./.github/workflows/composite/create-tag
