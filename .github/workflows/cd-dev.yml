@@ -39,13 +39,13 @@ jobs:
         uses: ./.github/workflows/composite/docker-setup
         id: docker-setup
         with:
-          TARGET: webapp-sandbox-dev
+          TARGET: backend
 
       - name: Update lambda
         uses: ./.github/workflows/composite/lambda-update
         id: lambda-update
         with:
-          TARGET: webapp-sandbox-dev
+          TARGET: backend
           LAMBDA_NAME: webapp-sandbox-dev
           ECR_REGISTRY: ${{ steps.aws-setup.outputs.ECR_REGISTRY }}
           REPOSITORY: webapp-sandbox-dev
