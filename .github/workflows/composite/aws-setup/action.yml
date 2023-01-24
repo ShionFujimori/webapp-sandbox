@@ -18,7 +18,7 @@ runs:
     # aws のアカウント設定
     - name: Configure AWS credentials
       id: aws-config
-      uses: aws-actions/aws-configure-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ inputs.REGION }}
         role-to-assume: ${{ inputs.AWS_ROLE_ARN }}

@@ -8,6 +8,10 @@ on:
     paths:
       - "src/backend/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   AWS_ROLE_ARN: arn:aws:iam::749825783834:role/GithubWebappSandboxRole
   REGION: us-east-1
