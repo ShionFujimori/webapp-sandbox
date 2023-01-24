@@ -1,0 +1,38 @@
+# awsへアクセスする設定
+name: aws config
+description: aws access user and role config
+inputs:
+  REGION:
+    required: true
+    description: resource region
+  AWS_ACCESS_KEY_ID:
+    required: true
+    description: aws credential id
+  AWS_SECRET_ACCESS_KEY:
+    required: true
+    description: aws credential secret key
+  AWS_ROLE_TO_ASSUME:
+    required: true
+    description: aws role
+outputs:
+  ECR_REGISTRY:
+    value: ${{ steps.login-ecr.outputs.registry }}
+    description: ECR REGISTRY name
+runs:
+  using: composite
+  steps:
+    # aws のアカウント設定
+    - name: Configure AWS credentials
+      id: aws-config
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ inputs.REGION }}
+        role-to-assume: ${{ inputs.AWS_ROLE_TO_ASSUME }}
+        role-duration-seconds: 900
+        role-skip-session-tagging: true
+    # ECRへのログイン
+    - name: Login ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1

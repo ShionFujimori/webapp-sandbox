@@ -1,0 +1,22 @@
+# docker コンテナの作成
+name: setup docker container
+description: setup docker container
+inputs:
+  TARGET:
+    required: false
+    description: Dockerfile target
+runs:
+  using: composite
+  steps:
+    - name: cache setting
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      continue-on-error: true
+
+    - name: docker build
+      working-directory: ./docker
+      run: |
+        export PLATFORM=linux/amd64
+        export REQUIREMENTS_FILE=requirements.txt
+        docker-compose build ${{ inputs.TARGET }}
+        docker-compose up -d ${{ inputs.TARGET }}
+      shell: bash

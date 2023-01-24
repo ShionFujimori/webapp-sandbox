@@ -1,0 +1,19 @@
+# docker コンテナのタグ作成
+name: create docker container tag
+description: docker container tag
+outputs:
+  IMAGE_TAG:
+    value: ${{ steps.create-tag.outputs.IMAGE_TAG }}
+    description: docker container Image Tag
+runs:
+  using: composite
+  steps:
+    # 新しいコンテナにつけるタグをコミットハッシュと日付から作成
+    - name: create image tag
+      id: create-tag
+      run: |
+        SHA=${{ github.sha }}
+        IMAGE_TAG=$(TZ=UTC-9 date '+%Y%m%d%H%M')-${SHA:0:7}
+        echo IMAGE_TAG $IMAGE_TAG
+        echo "IMAGE_TAG=$(echo $IMAGE_TAG)" >> $GITHUB_OUTPUT
+      shell: bash
