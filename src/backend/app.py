@@ -8,7 +8,7 @@ def make_response(statusCode: int, message: str, body: dict = {}) -> dict:
     return {
         "statusCode": statusCode,
         "headers": {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "*",
