@@ -13,9 +13,6 @@ inputs:
   REPOSITORY:
     description: ECR repository name
     required: true
-  IMAGE_TAG:
-    description: container image tag
-    required: true
 
 runs:
   using: composite
@@ -23,7 +20,7 @@ runs:
     # docker imageにタグをつける
     - name: tag
       run: |
-        docker tag ${{ inputs.IMAGE_NAME }}:latest ${{ inputs.ECR_REGISTRY }}/${{ inputs.REPOSITORY }}:${{ inputs.IMAGE_TAG }}
+        docker tag ${{ inputs.IMAGE_NAME }}:latest ${{ inputs.ECR_REGISTRY }}/${{ inputs.REPOSITORY }}:latest
       shell: sh
 
     # ECRにpush
@@ -32,8 +29,7 @@ runs:
       env:
         ECR_REGISTRY: ${{ inputs.ECR_REGISTRY }}
         REPOSITORY: ${{ inputs.REPOSITORY }}
-        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
-      run: docker push ${ECR_REGISTRY}/${REPOSITORY}:${IMAGE_TAG}
+      run: docker push ${ECR_REGISTRY}/${REPOSITORY}:latest
       shell: sh
 
     # lambda function と provision concurrencyを既存のものを削除
@@ -43,7 +39,6 @@ runs:
       env:
         ECR_REGISTRY: ${{ inputs.ECR_REGISTRY }}
         REPOSITORY: ${{ inputs.REPOSITORY }}
-        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
         FUNCTION: ${{ inputs.LAMBDA_NAME }}
       run: sh .github/scripts/aws_lambda_update.sh
       shell: sh

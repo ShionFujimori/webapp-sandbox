@@ -32,10 +32,6 @@ jobs:
           AWS_ROLE_ARN: ${{ env.AWS_ROLE_ARN }}
           REGION: ${{ env.REGION }}
 
-      - name: Create image tag
-        uses: ./.github/workflows/composite/create-tag
-        id: create-tag
-
       - name: Setup docker
         uses: ./.github/workflows/composite/docker-setup
         id: docker-setup
@@ -50,4 +46,3 @@ jobs:
           LAMBDA_NAME: webapp-sandbox-dev
           ECR_REGISTRY: ${{ steps.aws-setup.outputs.ECR_REGISTRY }}
           REPOSITORY: webapp-sandbox-dev
-          IMAGE_TAG: ${{ steps.create-tag.outputs.IMAGE_TAG }}

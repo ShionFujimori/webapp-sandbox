@@ -21,5 +21,5 @@ for lambda_version in $(aws lambda list-versions-by-function \
 
 # 最新版のaws lambdaを作成
 aws lambda update-function-code --function-name $FUNCTION \
-        --image-uri $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG \
+        --image-uri $ECR_REGISTRY/$REPOSITORY:latest \
         --publish
