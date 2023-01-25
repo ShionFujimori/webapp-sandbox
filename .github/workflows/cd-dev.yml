@@ -14,6 +14,7 @@ permissions:
 
 env:
   # ロールの作成方法：https://dev.classmethod.jp/articles/github-actions-oidc-configure-aws-credentials/
+  # PowerUserAccessポリシーをアタッチしている
   AWS_ROLE_ARN: arn:aws:iam::749825783834:role/GithubWebappSandboxRole
   REGION: us-east-1
 
