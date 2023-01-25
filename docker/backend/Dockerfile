@@ -8,11 +8,13 @@ WORKDIR /workdir
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/bin/aws-lambda-rie
 RUN chmod 755 /usr/bin/aws-lambda-rie
 
-COPY requirements.txt /requirements.txt
+COPY docker/backend/requirements.txt /requirements.txt
 RUN pip install -U pip && \
     pip install --no-cache-dir -r /requirements.txt
 
-COPY entry.sh /entry.sh
+COPY src/backend/ .
+
+COPY docker/backend/entry.sh /entry.sh
 RUN chmod 755 /entry.sh
 
 ENTRYPOINT [ "/bin/bash", "/entry.sh" ]

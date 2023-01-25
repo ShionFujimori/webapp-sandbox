@@ -2,15 +2,15 @@ version: '3'
 services:
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: docker/backend/Dockerfile
     container_name: 'webapp-sandbox-dev'
     image: webapp-sandbox-dev
     platform: linux/x86_64
     ports:
       - '8001:8080'
-    volumes:
-      - ../src/backend/:/workdir
+    # volumes:
+    #   - ../src/backend/:/workdir
     tty: true
 
   mock-ui:
