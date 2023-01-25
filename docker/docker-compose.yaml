@@ -4,8 +4,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: 'backend'
-    image: backend
+    container_name: 'webapp-sandbox-dev'
+    image: webapp-sandbox-dev
     platform: linux/x86_64
     ports:
       - '8001:8080'

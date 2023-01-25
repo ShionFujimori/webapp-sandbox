@@ -1,9 +1,9 @@
 name: update lambda
 description: push docker image to ECR, then update lambda
 inputs:
-  TARGET:
-    required: false
-    description: Dockerfile target
+  IMAGE_NAME:
+    description: docker image name
+    required: true
   LAMBDA_NAME:
     description: lambda function name
     required: true
@@ -20,12 +20,13 @@ inputs:
 runs:
   using: composite
   steps:
+    # docker imageにタグをつける
     - name: tag
       run: |
-        docker tag ${{ inputs.TARGET }}:latest 749825783834.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.LAMBDA_NAME }}:${{ inputs.IMAGE_TAG }}
+        docker tag ${{ inputs.IMAGE_NAME }}:latest ${{ inputs.ECR_REGISTRY }}/${{ inputs.REPOSITORY }}:${{ inputs.IMAGE_TAG }}
       shell: sh
 
-    # docker imageのタグをつけてpush
+    # ECRにpush
     - name: push new container
       id: push
       env:

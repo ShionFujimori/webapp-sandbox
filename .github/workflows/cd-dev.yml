@@ -13,6 +13,7 @@ permissions:
   contents: read
 
 env:
+  # ロールの作成方法：https://dev.classmethod.jp/articles/github-actions-oidc-configure-aws-credentials/
   AWS_ROLE_ARN: arn:aws:iam::749825783834:role/GithubWebappSandboxRole
   REGION: us-east-1
 
@@ -45,7 +46,7 @@ jobs:
         uses: ./.github/workflows/composite/lambda-update
         id: lambda-update
         with:
-          TARGET: backend
+          IMAGE_NAME: webapp-sandbox-dev
           LAMBDA_NAME: webapp-sandbox-dev
           ECR_REGISTRY: ${{ steps.aws-setup.outputs.ECR_REGISTRY }}
           REPOSITORY: webapp-sandbox-dev
