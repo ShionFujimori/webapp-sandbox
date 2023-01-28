@@ -12,7 +12,7 @@ COPY docker/backend/requirements.txt /requirements.txt
 RUN pip install -U pip && \
     pip install --no-cache-dir -r /requirements.txt
 
-# COPY src/backend/ .
+COPY src/backend/ .
 
 COPY docker/backend/entry.sh /entry.sh
 RUN chmod 755 /entry.sh
